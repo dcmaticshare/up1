@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UPTO Content</title>
+  <style>
+    :root {
+      --surface: #fcf8f9;
+      --surface-clean: #ffffff;
+      --surface-soft: #f3f1f1;
+      --surface-hover: #eceaea;
+      --text: #1b1b1c;
+      --text-muted: #4f5158;
+      --primary: #07537d;
+      --primary-deep: #000b28;
+      --secondary: #61bbfe;
+      --outline: #d9d9de;
+      --shadow: 0 18px 45px rgba(13, 33, 73, 0.08);
+      --radius: 8px;
+      --button-radius: 6px;
+      --content: 1280px;
+      --gutter: clamp(20px, 5vw, 80px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--surface);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid rgba(217, 217, 222, 0.7);
+      backdrop-filter: blur(16px);
+    }
+
+    .header-inner {
+      width: min(100%, var(--content));
+      min-height: 98px;
+      margin: 0 auto;
+      padding: 8px var(--gutter);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .logo {
+      width: 156px;
+      height: 84px;
+      overflow: hidden;
+      display: block;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .main-nav {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border: 1px solid var(--outline);
+      border-radius: var(--button-radius);
+      background: var(--surface-clean);
+      color: var(--primary-deep);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .menu-toggle:hover,
+    .menu-toggle:focus-visible {
+      background: var(--surface-hover);
+      border-color: #c7c7cf;
+      box-shadow: 0 10px 24px rgba(0, 11, 40, 0.12);
+      outline: none;
+    }
+
+    .menu-toggle-icon {
+      width: 22px;
+      height: 16px;
+      position: relative;
+      display: block;
+    }
+
+    .menu-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: currentColor;
+      transition: transform 180ms ease, opacity 180ms ease, top 180ms ease;
+    }
+
+    .menu-toggle-icon span:nth-child(1) {
+      top: 0;
+    }
+
+    .menu-toggle-icon span:nth-child(2) {
+      top: 7px;
+    }
+
+    .menu-toggle-icon span:nth-child(3) {
+      top: 14px;
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-toggle-icon span:nth-child(1) {
+      top: 7px;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-toggle-icon span:nth-child(3) {
+      top: 7px;
+      transform: rotate(-45deg);
+    }
+
+    .nav-link {
+      min-height: 48px;
+      padding: 10px 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0;
+      transition: background-color 180ms ease, color 180ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible,
+    .nav-link.is-active {
+      background: var(--surface-hover);
+      color: var(--primary);
+      outline: none;
+    }
+
+    .button {
+      border: 0;
+      border-radius: var(--button-radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 24px;
+      background: var(--primary-deep);
+      color: #ffffff;
+      font: 700 15px/1 Inter, "Segoe UI", Arial, sans-serif;
+      transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      background: #07183f;
+      box-shadow: 0 10px 24px rgba(0, 11, 40, 0.18);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .mobile-nav-cta {
+      display: none;
+    }
+
+    .button.secondary {
+      background: var(--secondary);
+      color: var(--primary-deep);
+      box-shadow: 0 12px 28px rgba(0, 11, 40, 0.18);
+    }
+
+    .button.secondary:hover,
+    .button.secondary:focus-visible {
+      background: #8acfff;
+    }
+
+    .hero {
+      min-height: clamp(580px, 74vh, 760px);
+      display: grid;
+      place-items: center;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: var(--primary-deep);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(rgba(0, 11, 40, 0.34), rgba(0, 11, 40, 0.52)),
+        url("https://lh3.googleusercontent.com/aida-public/AB6AXuB_zM6oXdJYxj3rr1MtWIEf5drQZe6odTWoGYRT5Kho6cARKNB1SbLSHNDL3W0flyAWNcbT7hvanXAvQvc3qYXCZYuPwY1ZvKofbYKr8i_mCvptIvo-8s9Xrx3685sAApA24NR_YRIcEM2G_yIqokfvPFhG_1mYHUroJy3RbET-Jg5ajBGgCtKKX2QIA5gfvo4mR5AGWEApIDg4rJcw_P2IxWUdBz2u5vry4nNcZREhXDFlSVjuya-QmYfKbRyl3fXt3ESGKzwJGVw") center / cover no-repeat;
+      filter: saturate(0.92);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(0, 11, 40, 0.16);
+      backdrop-filter: blur(1.5px);
+    }
+
+    .hero-content {
+      width: min(100%, 900px);
+      padding: 0 var(--gutter);
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .hero h1 {
+      margin: 0 0 22px;
+      font-family: Montserrat, "Aptos Display", "Segoe UI", Arial, sans-serif;
+      font-size: clamp(42px, 7vw, 72px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero p {
+      width: min(100%, 620px);
+      margin: 0 auto 34px;
+      font-size: clamp(16px, 2vw, 19px);
+      color: rgba(255, 255, 255, 0.92);
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .section {
+      padding: clamp(76px, 9vw, 120px) var(--gutter);
+    }
+
+    .section-inner {
+      width: min(100%, var(--content));
+      margin: 0 auto;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 5fr) minmax(300px, 6fr);
+      gap: clamp(44px, 8vw, 96px);
+      align-items: center;
+    }
+
+    .about-image {
+      position: relative;
+    }
+
+    .about-image::before {
+      content: "";
+      position: absolute;
+      inset: 18px -18px -18px 18px;
+      z-index: -1;
+      border-radius: var(--radius);
+      background: var(--surface-soft);
+    }
+
+    .about-image img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border: 1px solid rgba(217, 217, 222, 0.85);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .about-copy h2,
+    .mission h2 {
+      margin: 0 0 22px;
+      color: var(--primary-deep);
+      font-family: Montserrat, "Aptos Display", "Segoe UI", Arial, sans-serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      line-height: 1.28;
+      letter-spacing: 0;
+    }
+
+    .about-copy p,
+    .mission p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    .signature {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--primary-deep);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .signature::before {
+      content: "";
+      width: 48px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--secondary);
+    }
+
+    .mission-wrap {
+      background: var(--surface-soft);
+    }
+
+    .mission {
+      width: min(100%, 1024px);
+      margin: 0 auto;
+      padding: clamp(42px, 7vw, 70px);
+      border: 1px solid rgba(217, 217, 222, 0.7);
+      border-radius: var(--radius);
+      background: var(--surface-clean);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .mission-mark {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #e7f5ff;
+      color: var(--primary);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .mission p {
+      width: min(100%, 680px);
+      margin: 0 auto;
+      font-size: 16px;
+    }
+
+    .footer {
+      background: var(--primary-deep);
+      color: #ffffff;
+      padding: 76px var(--gutter);
+    }
+
+    .footer-inner {
+      width: min(100%, var(--content));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .footer-brand {
+      max-width: 390px;
+    }
+
+    .footer-logo {
+      display: inline-block;
+      margin-bottom: 14px;
+      font-family: Montserrat, "Aptos Display", "Segoe UI", Arial, sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .footer p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
+      gap: 18px 52px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 15px;
+      transition: color 180ms ease;
+    }
+
+    .footer-links a:hover,
+    .footer-links a:focus-visible {
+      color: #ffffff;
+      outline: none;
+    }
+
+    .menu-backdrop {
+      display: none;
+    }
+
+    @media (max-width: 1024px) {
+      body.menu-open {
+        overflow: hidden;
+      }
+
+      .header-inner {
+        min-height: 82px;
+        grid-template-columns: auto auto;
+        justify-content: space-between;
+        gap: 20px;
+        padding-block: 8px;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+        position: relative;
+        z-index: 30;
+      }
+
+      .main-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 20;
+        width: min(84vw, 380px);
+        height: 100dvh;
+        padding: 112px 28px 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 8px;
+        background: var(--surface-clean);
+        border-left: 1px solid rgba(217, 217, 222, 0.85);
+        box-shadow: -22px 0 45px rgba(13, 33, 73, 0.14);
+        transform: translateX(100%);
+        visibility: hidden;
+        transition: transform 260ms ease, visibility 0ms linear 260ms;
+      }
+
+      body.menu-open .main-nav {
+        transform: translateX(0);
+        visibility: visible;
+        transition: transform 260ms ease;
+      }
+
+      .nav-link {
+        width: 100%;
+        justify-content: flex-start;
+        min-height: 52px;
+        padding: 12px 14px;
+        border-radius: var(--button-radius);
+        color: var(--primary-deep);
+        font-size: 18px;
+      }
+
+      .mobile-nav-cta {
+        display: inline-flex;
+        width: 100%;
+        margin-top: 16px;
+      }
+
+      .menu-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 15;
+        display: block;
+        background: rgba(0, 11, 40, 0.34);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 220ms ease;
+      }
+
+      body.menu-open .menu-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .header-inner > .button {
+        display: none;
+      }
+
+      .about-grid,
+      .footer-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-links {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-inner {
+        min-height: 74px;
+      }
+
+      .logo {
+        width: 140px;
+        height: 76px;
+      }
+
+      .main-nav {
+        width: min(88vw, 340px);
+        padding: 96px 22px 28px;
+      }
+
+      .nav-link {
+        min-height: 50px;
+        font-size: 16px;
+      }
+
+      .hero {
+        min-height: 560px;
+      }
+
+      .about-image::before {
+        inset: 12px -10px -12px 10px;
+      }
+
+      .mission {
+        padding: 34px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="#home" aria-label="UPTO Content home">
+        <img src="assets/upto-logo-header.png" alt="UPTO Content">
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Menu openen" aria-controls="main-nav" aria-expanded="false">
+        <span class="menu-toggle-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Hoofdnavigatie">
+        <a class="nav-link is-active" href="#home">Home</a>
+        <a class="nav-link" href="#over-ons">Over ons</a>
+        <a class="nav-link" href="#realisaties">Realisaties</a>
+        <a class="nav-link" href="#contact">Contact</a>
+        <a class="button mobile-nav-cta" href="#contact">Get a Quote</a>
+      </nav>
+
+      <a class="button" href="#contact">Get a Quote</a>
+    </div>
+    <div class="menu-backdrop" data-menu-backdrop></div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h1>Unieke Perspectieven van Bovenaf</h1>
+        <p>Hoogwaardige dronefotografie en videografie voor bedrijven en industriële partners.</p>
+        <a class="button secondary" href="#realisaties">Bekijk Realisaties</a>
+      </div>
+    </section>
+
+    <section class="section" id="over-ons">
+      <div class="section-inner about-grid">
+        <div class="about-image">
+          <img
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnnGxyOEmuJAKUgZENdmFpwFft9lb_pCsLVt09sTRfwxsLjATTxDrQ3BZ3OjuqfpLCCtFhq-0zW8KcjT0WzY5Q6x7PS1r_22ZaJ9I00OFja7awEiYgOp0fpxrykYtST_9637wPMqikjbtZB5m9plL57GnqSEKahNlnUlJvpbQb4K-s-iFeCuX12POd-v_bIHQcKBJNDuBD5JmopS9TwfVPHBN3-vQGRZ85PBAj6_MLtvcf5llDYhztyzGvWBJWIcW5-Z4IG3Hd3KI"
+            alt="Professionele drone in een lichte studio"
+          >
+        </div>
+
+        <div class="about-copy">
+          <p class="eyebrow">Over ons</p>
+          <h2>Welkom bij UPTO Content.</h2>
+          <p>Wij zijn gespecialiseerd in drone diensten en fotografie, en bieden unieke perspectieven voor zowel bedrijven als particulieren. Met onze geavanceerde drones en professionele fotografen vangen we adembenemende beelden van bovenaf, perfect voor bouwprojecten, industrie, marketing, evenementen en vastgoedvisibiliteit.</p>
+          <div class="signature">Aerial excellence</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section mission-wrap" id="realisaties">
+      <div class="mission">
+        <div class="mission-mark" aria-hidden="true">UP</div>
+        <h2>Onze missie is om jouw visie tot leven te brengen met hoogwaardige beelden en betrouwbare service.</h2>
+        <p>Of je nu op zoek bent naar luchtfoto's, videoproducties of inspecties, ons team staat klaar om je te helpen. Ontdek de mogelijkheden en laat ons samen unieke content creëren.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">UPTO CONTENT</span>
+        <p>© 2026 UPTO Content. Aerial excellence for commercial and industrial partners.</p>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer navigatie">
+        <a href="#realisaties">Portfolio</a>
+        <a href="#over-ons">Services</a>
+        <a href="#contact">Privacy Policy</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const mainNav = document.querySelector("#main-nav");
+    const menuBackdrop = document.querySelector("[data-menu-backdrop]");
+    const menuQuery = window.matchMedia("(max-width: 1024px)");
+
+    function setMenu(open) {
+      document.body.classList.toggle("menu-open", open);
+      menuToggle.setAttribute("aria-expanded", String(open));
+      menuToggle.setAttribute("aria-label", open ? "Menu sluiten" : "Menu openen");
+      if (menuQuery.matches) {
+        mainNav.inert = !open;
+        mainNav.setAttribute("aria-hidden", String(!open));
+      }
+    }
+
+    function syncMenuMode() {
+      if (menuQuery.matches) {
+        const isOpen = document.body.classList.contains("menu-open");
+        mainNav.inert = !isOpen;
+        mainNav.setAttribute("aria-hidden", String(!isOpen));
+      } else {
+        document.body.classList.remove("menu-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Menu openen");
+        mainNav.inert = false;
+        mainNav.removeAttribute("aria-hidden");
+      }
+    }
+
+    menuToggle.addEventListener("click", () => {
+      setMenu(!document.body.classList.contains("menu-open"));
+    });
+
+    menuBackdrop.addEventListener("click", () => setMenu(false));
+
+    mainNav.addEventListener("click", (event) => {
+      if (event.target.closest("a") && menuQuery.matches) {
+        setMenu(false);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && document.body.classList.contains("menu-open")) {
+        setMenu(false);
+        menuToggle.focus();
+      }
+    });
+
+    menuQuery.addEventListener("change", syncMenuMode);
+    syncMenuMode();
+  </script>
+</body>
+</html>
